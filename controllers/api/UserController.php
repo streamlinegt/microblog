@@ -1,5 +1,5 @@
 <?
-class UserController extends AbstractController
+class UserController extends AbstractApiController
 {
 
 	/**

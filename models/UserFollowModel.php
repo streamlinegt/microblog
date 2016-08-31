@@ -18,4 +18,11 @@ class UserFollowModel extends AbstractModel
 	public function UserFollowModel(){
 
 	}
+
+	//OVERLOAD SAVE FUNCTION TO CHECK FIRST
+	public function save(){
+		if(self::getList(array('followeeId'=>$this->followeeId, 'followerId'=>$this->followerId)))
+			return; //NO NEED TO THROW, JUST DONT INSERT
+		return parent::save();
+	}
 }

@@ -1,6 +1,6 @@
 <?
 
-class BlogController extends AbstractController
+class BlogController extends AbstractApiController
 {
 	/**
 	 * @desc
