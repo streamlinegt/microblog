@@ -22,6 +22,7 @@ class UserModel extends AbstractModel
 		
 	}
 	
+	//ADD A CHECK TO SEE IF EMAIL IS VALID
 	public function validateData(){
 		if (!self::isEmailValid($this->email))
 			throw new Exception("Email address {$this->email} is not a valid email address.");
@@ -29,6 +30,7 @@ class UserModel extends AbstractModel
 		parent::validateData();
 	}
 
+	//PRIVATE FUNCTION FOR CHECKING EMAIL ADDRESS
 	private function isEmailValid($email){
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}

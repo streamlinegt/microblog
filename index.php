@@ -19,7 +19,7 @@ $controller = new BlogController();
 
 //FAKE THE $_POST ARRAY
 $_POST = array('id'=>1, 'title'=>"My Title", "blog"=>"My Blog klajdlsdkjfslkdfjslkfsdjflsdkfjsdlkfjsdlfkjdsflksdjflsdkfjsldkfjsldkfjsdlkfjslfdkjslkdfjsldkfjsdlkfjsdlkfjsldfkjsldfkjsldfkjsldkfjsldkfjsldkfjsldkfjslkdfjslkdfjlskdfjlskdfjlskdfjslkdfjsdlkfjslkdfjslkdfjslkdfjlsdkfjslkdfjslkdfjsldkfjslkdjflskdjfslkdjflsdkfj", "published"=>true, "userId"=>12);
-
+//SHOULD THROW SINCE BLOG IS TOO LONG
 $controller->SaveBlog();
 
 

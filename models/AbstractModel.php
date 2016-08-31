@@ -3,15 +3,37 @@
 abstract class AbstractModel 
 {
 	protected static $dataModel;
+	protected static $tableName;
 
+	public function isNew(){
+		return (isset($this->id));
+	}
+
+	/**
+	 * @return array of strings
+	 * No Parameters
+	 */
 	public function getColumns(){
 		return array_keys(static::$dataModel);
 	}
 
+
+	/**
+	 * @desc
+	 * get the table associated with the current model
+	 * 
+	 * @return string
+	 * No Parameters
+	 */
 	public function getTableName() {
 		return static::$tableName;
 	}
 
+
+	/**
+	 * @desc
+	 * Populates member variables based on the columns in the data model
+	 */
 	public function populate($parameters){
 		$columns = $this->getColumns();
 		foreach($columns as $col){
@@ -20,6 +42,15 @@ abstract class AbstractModel
 			}
 		}
 	}
+
+
+	/**
+	 * @desc
+	 * uses the tables associated with the called class and grabs a row out of the database based on ID
+	 * @param int $id
+	 * 
+	 * @return object of called class
+	 */
 
 	public static function getById($id){
 		$class = new static;
@@ -36,17 +67,56 @@ abstract class AbstractModel
 		}
 	}
 
+
+	/**
+	 * @desc
+	 * inserts new row into the DB
+	 * 
+	 */
 	public function insert(){
 		$data = self::createDataArray();
+		foreach($data as $key => &$value) addslashes($value);
 		$values = implode("','", $data);
 		$columns = implode("`,`", array_keys($data));
 		$tableName = $this->getTableName();
 
+		//STRING INTERPOLATE VALUES
 		$sql = "INSERT IGNORE INTO {$tableName} (`{$columns}`) VALUES ('{$values}');";
 		//echo $sql;
+		//FOR NOW CREATE SQL STATEMENT, NO DB TO RUN IT AGAINST!
 
 	}
 
+	/**
+	 * @desc
+	 * Updates an existing row
+	 * 
+	 */
+	public function update(){
+		$data = self::createDataArray();
+
+		$update = array();
+		foreach($data as $column => $value){
+			if($column != "id") $update[] = "`".$column."` = '".$value."'";
+		}
+
+		//USE IMPLODE TO BRING DATA TOGETHER
+		$updateString = implode(",", $update);
+
+		$tableName = $this->getTableName();
+		$id = $this->id;
+
+		//STRING INTERPOLATE THE VARIABLES
+		$sql = "UPDATE {$tableName} SET {$updateString} WHERE id = {$id};";
+		//QUERY($sql); //FOR NOW CREATE SQL STATEMENT, NO DB TO RUN IT AGAINST!
+		//echo $sql;
+	}
+
+	/**
+	 * @desc
+	 * Abstract save method, chooses whether to update or delete based on the ID column
+	 * 
+	 */
 	public function save(){
 		if(isset($this->id)){
 			return $this->update();
@@ -57,20 +127,12 @@ abstract class AbstractModel
 		}
 	}
 
-	public function update(){
-		$data = self::createDataArray();
-		$update = array();
-		foreach($data as $column => $value){
-			if($column != "id") $update[] = "`".$column."` = '".$value."'";
-		}
-		$updateString = implode(",", $update);
-		$tableName = $this->getTableName();
-		$id = $this->id;
-		$sql = "UPDATE {$tableName} SET {$updateString} WHERE id = {$id};";
-		//QUERY($sql);
-		echo $sql;
-	}
-
+	/**
+	 * @desc
+	 * Creates an associative array based on member variables and columns available
+	 * 
+	 * @return associative array
+	 */
 	public function createDataArray() {
 		$columns = $this->getColumns();
 		$return = array();
@@ -82,6 +144,17 @@ abstract class AbstractModel
 		return $return;
 	}
 
+
+	/**
+	 * @desc 
+	 * takes in parameters and queries table for rows.
+	 * 
+	 * @param array $params associative, key is column, value is what to search for
+	 * @param array/string $sort first is column, second is direction
+	 * @param array/string $limit first start index, second is count
+	 * 
+	 * @return array of called class objects
+	 */
 	public static function getList($params, $sort = null, $limit = null)
     {
         $caller = new static;
@@ -128,6 +201,9 @@ abstract class AbstractModel
 
         if($limit)
         {
+        	if(is_array($limit)){
+        		$limit = $limit[0].", ".$limit[1];
+        	}
             $sql .= " LIMIT ".$limit;
         }
         
@@ -137,25 +213,15 @@ abstract class AbstractModel
         $columns = $caller->getColumns();
         $return = array();
         foreach($columns as $col){
-        	$return[$col] = "meat";
+        	$return[$col] = "Test Data";
         }
         return array($return);
-
-        $result = mysql_query($sql, $conn) or die ($sql." ".mysql_error());
-        if((mysql_num_rows($result)) < 1){
-            return false;
-            }//end if
-        else{
-            while($line = mysql_fetch_array($result))
-            {
-                 $obj = new $caller();
-                 $obj->populate($line);
-                 $array_result[] = $obj;
-            }
-            return $array_result;
-        }//end else
     }
 
+    /**
+     * @desc
+     * Validates the data based on the member variables and the data model
+     */
     public function validateData(){
 		$data = $this->createDataArray();
 		foreach($data as $key => $value){
@@ -166,18 +232,14 @@ abstract class AbstractModel
 						throw new Exception("Invalid Data: {$key} is not an integer");
 					}
 					break;
-				case stristr($dataType, "varchar"):
-					preg_match_all('!\d+!', $dataType, $matches);
-					$length = $matches[0][0];
-					if((int)$length < strlen($value)){
-						throw new Exception("Invalid Data: {$key} is longer than {$length} characters");
-					}
-					break;
+				
 				case $dataType == "boolean":
 					if(gettype($value) != "boolean"){
 						throw new Exception("Invalid Data: {$key} is not a boolean, it is a {gettype($value)}.");
 					}
 					break;
+
+				//ADD MORE CASES IN FURTURE
 
 			}
 		}

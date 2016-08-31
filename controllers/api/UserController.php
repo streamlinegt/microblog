@@ -1,6 +1,11 @@
 <?
 class UserController extends AbstractController
 {
+
+	/**
+	 * @desc
+	 * Grabs the params and passes them to the Usermanager to follow
+	 */
 	public function Follow(){
 		$followeeId = $this->getParam("followeeId");
 		$followerId = $this->getParam("followerId");
@@ -9,6 +14,11 @@ class UserController extends AbstractController
 		echo json_encode(array("response"=>true, "data"=>""));
 	}
 
+	/*
+	 * @desc
+	 * Grabs the post parameters, and passed the,
+	 * int the register user function
+	 */
 	public function RegisterUser(){
 		$params = $this->getAllPostParams();
 		try{
