@@ -61,14 +61,14 @@ abstract class AbstractModel
 		$data = self::createDataArray();
 		$update = array();
 		foreach($data as $column => $value){
-			$update[] = "`".$column."` = '".$value."', ";
+			if($column != "id") $update[] = "`".$column."` = '".$value."'";
 		}
 		$updateString = implode(",", $update);
 		$tableName = $this->getTableName();
 		$id = $this->id;
 		$sql = "UPDATE {$tableName} SET {$updateString} WHERE id = {$id};";
 		//QUERY($sql);
-		//echo $sql;
+		echo $sql;
 	}
 
 	public function createDataArray() {
@@ -159,7 +159,7 @@ abstract class AbstractModel
     public function validateData(){
 		$data = $this->createDataArray();
 		foreach($data as $key => $value){
-			$dataType = $this->dataModel[$key];
+			$dataType = static::$dataModel[$key];
 			switch(true){
 				case stristr($dataType, "int");
 					if(!is_numeric($value)){
@@ -170,7 +170,7 @@ abstract class AbstractModel
 					preg_match_all('!\d+!', $dataType, $matches);
 					$length = $matches[0][0];
 					if((int)$length < strlen($value)){
-						throw new Exception("Invalid Data: {$key} is longer than {length}");
+						throw new Exception("Invalid Data: {$key} is longer than {$length} characters");
 					}
 					break;
 				case $dataType == "boolean":
