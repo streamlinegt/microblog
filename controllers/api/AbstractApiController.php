@@ -10,6 +10,7 @@ class AbstractApiController extends AbstractController
 			throw new Exception('Invalid Api Key Provided');
 
 		//AUTHENTICATE APIKEY AGAINST DATABASE, IF EXPIRED OT NONE EXISITENT, THROW
+		//CALL FOR INSTANCE THE ApiManager TO CHECK AUTHENTICITY OF KEY
 
 	}
 
