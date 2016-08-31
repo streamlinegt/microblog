@@ -3,13 +3,14 @@
 class BlogModel extends AbstractModel
 {
 	protected static $tableName = "Data.Blogs";
+
 	public $id;
 	public $title;
 	public $blog;
 	public $date;
 	public $published;
 	
-	protected $dataModel = array
+	protected static $dataModel = array
 	(
 		"id"=> "int(11)",
 		"userId"=> "int(11)",
@@ -26,8 +27,8 @@ class BlogModel extends AbstractModel
 		
 	}
 
-	public static function getBlogs($limit){
-		return self::getList(array(), array('date','DESC'), $limit);
+	public static function getBlogs($params, $limit = null){
+		return self::getList($params, array('date','DESC'), $limit);
 	}
 
 

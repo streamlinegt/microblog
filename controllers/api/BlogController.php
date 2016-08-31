@@ -9,7 +9,9 @@ class BlogController extends AbstractController
 	}
 
 	public function GetBlogs(){
-		$blogs = BlogModel::getBlogs();
+		$params = array();
+		$params['userId'] = $this->getParam("userId");
+		$blogs = BlogModel::getBlogs($params);
 		echo json_encode(array("response"=>true,"data"=>$blogs));
 	}
 

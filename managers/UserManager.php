@@ -5,8 +5,9 @@ class UserManager
 	public static function registerUser($parameters){
 		$newUser = new UserModel();
 		$newUser->populate($parameters);
+		$newUser->validateData();
 		$newUser->save();
-		return $newUser();
+		return $newUser;
 	}
 
 	public static function login($nickname, $password){
@@ -14,6 +15,9 @@ class UserManager
 		if(!$user){
 			throw new Exception("Invalid Credentials");
 		}
+
+		//SET SESSSION AND/OR COOKIE
+		return;
 	}
 
 	public static function logout(){

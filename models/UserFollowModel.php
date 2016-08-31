@@ -7,7 +7,7 @@ class UserFollowModel extends AbstractModel
 	public $followerId;
 	public $followeeId;
 
-	protected $dataModel = array
+	protected static $dataModel = array
 	(
 		"id" => "INT(11)",
 		"followeeId" => "INT(11)",

@@ -2,9 +2,10 @@
 
 abstract class AbstractModel 
 {
-	protected $dataModel;
+	protected static $dataModel;
+
 	public function getColumns(){
-		return array_keys($this->dataModel);
+		return array_keys(static::$dataModel);
 	}
 
 	public function getTableName() {

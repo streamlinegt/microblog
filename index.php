@@ -20,4 +20,10 @@ $controller = new BlogController();
 //FAKE THE $_POST ARRAY
 $_POST = array('title'=>"My Title", "blog"=>"My Blog", "published"=>true, "userId"=>12);
 
-$controller->SaveBlog();
+//$controller->SaveBlog();
+
+
+//ADD NEW USER
+$_POST = array('nickname'=>'streamlinegt', 'password'=>'meat', 'email'=>'benroberts@sdsnow.net');
+$controller = new UserController();
+$controller->registerUser();
