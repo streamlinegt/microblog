@@ -1,0 +1,7 @@
+<?
+
+class AbstractApiController extends AbstractController
+{
+	
+
+}
