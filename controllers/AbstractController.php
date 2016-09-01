@@ -15,12 +15,12 @@ abstract class AbstractController
 
 	//GETS THE POST PARAMETER BY NAME
 	public function getPostParam($name){
-		return (isset($_POST[$name])) ? mysql_real_escape_string($_POST[$name]) : null;
+		return (isset($_POST[$name])) ? $_POST[$name] : null;
 	}
 
 	//GETS THE GET PARAMETER BY NAME
 	public function getGetParam($name){
-		return (isset($_GET[$name])) ? mysql_real_escape_string($_GET[$name]) : null;
+		return (isset($_GET[$name])) ? $_GET[$name] : null;
 	}
 
 	//RETURNS THE ENTIRE POST ARRAY
@@ -37,11 +37,9 @@ abstract class AbstractController
 	private function sanitize($array){
 		$return = array();
 		foreach($array as $key => $value){
-			$return[$key] = mysql_real_escape_string($value);
+			$return[$key] = $value;
 		}
 		return $return;
 	}
-
-
 	
 }

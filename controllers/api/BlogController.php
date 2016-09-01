@@ -9,7 +9,11 @@ class BlogController extends AbstractApiController
 	public function GetBlog(){
 		$id = $this->getParam("id");
 		$blog = BlogManager::getById($id);
-		echo json_encode(array("response"=>http_response_code(200),"data"=>$blog));
+		if(!$blog){
+			echo json_encode(array("response"=>false, "error"=>"Blog with id {$id} not found"));
+			return;
+		}
+		echo json_encode(array("response"=>true,"data"=>$blog));
 	}
 
 	/**
@@ -35,12 +39,12 @@ class BlogController extends AbstractApiController
 		}
 		catch(Exception $ex){
 			http_response_code(400);
-			echo json_encode(array("response"=>http_response_code(),"error"=>$ex->getMessage()));
+			echo json_encode(array("response"=>false,"error"=>$ex->getMessage()));
 			return;
 		}
 		
 
-		echo json_encode(array("response"=>http_response_code(200),"data"=>$blog));
+		echo json_encode(array("response"=>true,"data"=>$blog));
 	}
 
 }

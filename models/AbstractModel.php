@@ -6,7 +6,7 @@ abstract class AbstractModel
 	protected static $tableName;
 
 	public function isNew(){
-		return (isset($this->id));
+		return (!isset($this->id));
 	}
 
 	/**
@@ -55,8 +55,6 @@ abstract class AbstractModel
 	public static function getById($id){
 		$class = new static;
 		$tableName = $class->getTableName();
-		$columns = $class->getColumns();
-		$colString = implode("`,`", $columns);
 		
 		//GET INFO OUT OF DB
 		$res = self::getList(array('id'=>$id));
@@ -65,6 +63,8 @@ abstract class AbstractModel
 			$obj->populate($res[0]);
 			return $obj;
 		}
+
+		return null;
 	}
 
 

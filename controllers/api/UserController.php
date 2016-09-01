@@ -9,7 +9,13 @@ class UserController extends AbstractApiController
 	public function Follow(){
 		$followeeId = $this->getParam("followeeId");
 		$followerId = $this->getParam("followerId");
-		UserManager::followUser($followerId, $followeeId);
+		try{
+			UserManager::followUser($followerId, $followeeId);
+		} catch(Exception $ex){
+			echo json_encode(array("response"=>false,"error"=>$ex->getMessage()));
+			return;
+		}
+		
 
 		echo json_encode(array("response"=>true, "data"=>""));
 	}
@@ -25,8 +31,7 @@ class UserController extends AbstractApiController
 			$newUser = UserManager::registerUser($params);
 		}
 		catch(Exception $ex){
-			http_response_code(400);
-			echo json_encode(array("response"=>http_response_code(),"error"=>$ex->getMessage()));
+			echo json_encode(array("response"=>false,"error"=>$ex->getMessage()));
 			return;
 		}
 		
