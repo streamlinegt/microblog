@@ -4,6 +4,11 @@ class UserModel extends AbstractModel
 {
 	protected static $tableName = "Data.Users";
 
+	public $id;
+	public $nickname;
+	public $email;
+	public $isActive;
+
 	protected static $dataModel = array
 	(
 		"id" => "INT(11)",
@@ -12,11 +17,6 @@ class UserModel extends AbstractModel
 		"password" => "VARCHAR(100)",
 		"isActive" => "BOOLEAN"
 	);
-
-	public $id;
-	public $nickname;
-	public $email;
-	public $isActive;
 
 	public function UserModel(){
 		

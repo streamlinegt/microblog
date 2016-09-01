@@ -37,7 +37,7 @@ abstract class AbstractController
 	private function sanitize($array){
 		$return = array();
 		foreach($array as $key => $value){
-			$return[$key] = $value;
+			$return[$key] = mysqli_real_escape_string($value);
 		}
 		return $return;
 	}
